@@ -38,5 +38,5 @@ public class JudgeInfo implements Serializable {
     /**
      * 代码长度
      */
-    private String codeLength;
+    private Integer codeLength;
 }
