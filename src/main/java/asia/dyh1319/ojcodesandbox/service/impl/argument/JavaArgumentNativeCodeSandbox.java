@@ -1,5 +1,6 @@
 package asia.dyh1319.ojcodesandbox.service.impl.argument;
 
+import asia.dyh1319.ojcodesandbox.constant.CodeSandboxConstant;
 import asia.dyh1319.ojcodesandbox.enums.JudgeInfoMessageEnum;
 import asia.dyh1319.ojcodesandbox.model.ExecuteCodeRequest;
 import asia.dyh1319.ojcodesandbox.model.ExecuteCodeResponse;
@@ -25,11 +26,6 @@ import java.util.stream.Collectors;
  */
 @Service
 public class JavaArgumentNativeCodeSandbox implements CodeSandbox {
-    
-    /**
-     * 全局代码存储目录
-     */
-    private static final String GLOBAL_CODE_DIR_NAME = "tempCode";
     
     /**
      * 全局Java类名
@@ -80,14 +76,8 @@ public class JavaArgumentNativeCodeSandbox implements CodeSandbox {
         // 3. 计算代码字节数（代码长度）
         int codeLength = code.length();
         // 4. 将用户的代码保存为文件
-        String rootDirPath = System.getProperty("user.dir");
-        String globalCodeDirPath = rootDirPath + File.separator + GLOBAL_CODE_DIR_NAME;
-        // 判断全局代码目录是否存在，没有则新建
-        if (!FileUtil.exist(globalCodeDirPath)) {
-            FileUtil.mkdir(globalCodeDirPath);
-        }
         // 把不同提交的代码隔离存放
-        String userCodeDirPath = globalCodeDirPath + File.separator + new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date()) + '-' + UUID.randomUUID();
+        String userCodeDirPath = CodeSandboxConstant.GLOBAL_CODE_DIR_PATH + File.separator + new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date()) + '-' + UUID.randomUUID();
         String userCodePath = userCodeDirPath + File.separator + GLOBAL_JAVA_CLASS_NAME;
         try {
             File userCodeFile = FileUtil.writeString(code, userCodePath, StandardCharsets.UTF_8);
@@ -103,9 +93,9 @@ public class JavaArgumentNativeCodeSandbox implements CodeSandbox {
             for (String input : inputList) {
                 String runCmd;
                 if (SystemUtil.isWindows()) {
-                    runCmd = String.format("java -Xmx%sk -Dfile.encoding=UTF-8 -cp %s;%s -Djava.security.manager=%s Main %s", memoryLimit.toString(), userCodeDirPath, rootDirPath + File.separator + SECURITY_MANAGER_RELATIVE_DIR_PATH, SECURITY_MANAGER_CLASS_NAME, input);
+                    runCmd = String.format("java -Xmx%sk -Dfile.encoding=UTF-8 -cp %s;%s -Djava.security.manager=%s Main %s", memoryLimit.toString(), userCodeDirPath, CodeSandboxConstant.ROOT_DIR_PATH + File.separator + SECURITY_MANAGER_RELATIVE_DIR_PATH, SECURITY_MANAGER_CLASS_NAME, input);
                 } else if (SystemUtil.isLinux()) {
-                    runCmd = String.format("java -Xmx%sk -Dfile.encoding=UTF-8 -cp %s:%s -Djava.security.manager=%s Main %s", memoryLimit.toString(), userCodeDirPath, rootDirPath + File.separator + SECURITY_MANAGER_RELATIVE_DIR_PATH, SECURITY_MANAGER_CLASS_NAME, input);
+                    runCmd = String.format("java -Xmx%sk -Dfile.encoding=UTF-8 -cp %s:%s -Djava.security.manager=%s Main %s", memoryLimit.toString(), userCodeDirPath, CodeSandboxConstant.ROOT_DIR_PATH + File.separator + SECURITY_MANAGER_RELATIVE_DIR_PATH, SECURITY_MANAGER_CLASS_NAME, input);
                 } else {
                     return ExecuteCodeResponseUtil.fail("内部服务错误：不支持的操作系统");
                 }

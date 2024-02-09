@@ -4,7 +4,7 @@ import asia.dyh1319.ojcodesandbox.enums.JudgeTypeEnum;
 import asia.dyh1319.ojcodesandbox.enums.LanguageEnum;
 import asia.dyh1319.ojcodesandbox.model.ExecuteCodeRequest;
 import asia.dyh1319.ojcodesandbox.model.ExecuteCodeResponse;
-import asia.dyh1319.ojcodesandbox.service.impl.argument.JavaArgumentNativeCodeSandbox;
+import asia.dyh1319.ojcodesandbox.service.impl.argument.JavaArgumentDockerCodeSandbox;
 import asia.dyh1319.ojcodesandbox.utils.ExecuteCodeResponseUtil;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +25,7 @@ public class CodeSandboxManager {
         if (judgeType == JudgeTypeEnum.ARGUMENT) {
             switch (language) {
                 case JAVA:
-                    codeSandbox = new JavaArgumentNativeCodeSandbox();
+                    codeSandbox = new JavaArgumentDockerCodeSandbox();
                     break;
                 case CPP:
                     break;

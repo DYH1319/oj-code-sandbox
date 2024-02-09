@@ -11,7 +11,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum JudgeTypeEnum {
     
-    ARGUMENT("命令行参数评测", "Argument"),
+    ARGUMENT("命令行参数评测", "Regular"),
     INTERACTIVE("输入流交互评测", "Interactive");
     
     private final String text;
